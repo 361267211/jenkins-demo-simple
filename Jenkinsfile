@@ -10,18 +10,18 @@ pipeline {
             }
         }
     stages {
-        stage('Build') {
-            steps {
-                sh 'mvn -B -DskipTests clean package'
-            }
-        }
-        stage('Package Docker Image') {
-            steps {
-                script {
-                    sh 'mvn clean package dockerfile:build -DskipTests'
-                }
-            }
-        }
+//         stage('Build') {
+//             steps {
+//                 sh 'mvn -B -DskipTests clean package'
+//             }
+//         }
+//         stage('Package Docker Image') {
+//             steps {
+//                 script {
+//                     sh 'mvn clean package dockerfile:build -DskipTests'
+//                 }
+//             }
+//         }
         stage('Push Docker Image') {
             steps {
                 script {
