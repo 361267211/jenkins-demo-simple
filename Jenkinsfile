@@ -38,7 +38,7 @@ pipeline {
             steps {
                 script {
                     // 这里直接运行宿主机中的 Docker 镜像
-                    sh "docker run -d --name myjen-container -p 8080:8080 $DOCKER_IMAGE:$DOCKER_TAG"
+                    sh "docker run -d --name myjen-container -p 8090:8080 $DOCKER_IMAGE:$DOCKER_TAG"
                 }
             }
         }
