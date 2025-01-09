@@ -52,6 +52,29 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <!-- Dockerfile Maven Plugin for building Docker image -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal> <!-- This goal will build the docker image -->
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <repository>your-docker-repository/demo</repository> <!-- Optional: specify a custom Docker repo -->
+                    <tag>${project.version}</tag> <!-- Tag the Docker image with the version from pom -->
+                    <buildArgs>
+                        <buildArg>
+                            <name>JAR_FILE</name>
+                            <value>target/${project.artifactId}-${project.version}.jar</value> <!-- JAR file path -->
+                        </buildArg>
+                    </buildArgs>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
