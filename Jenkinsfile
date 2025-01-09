@@ -1,4 +1,8 @@
 pipeline {
+    environment {
+        DOCKER_IMAGE = 'myrepo/myjen'        // Docker 镜像的名称
+        DOCKER_TAG = 'v1.0.0'                // Docker 镜像的标签
+    }
     agent {
             docker {
                 image 'maven:3.8-openjdk-17'
@@ -15,6 +19,15 @@ pipeline {
             steps {
                 script {
                     sh 'mvn clean package dockerfile:build -DskipTests'
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                script {
+//                     sh 'docker push $DOCKER_IMAGE:$DOCKER_TAG'  // 推送镜像到仓库
+                    sh 'docker push $DOCKER_IMAGE:$DOCKER_TAG'  // 推送镜像到仓库
+
                 }
             }
         }
