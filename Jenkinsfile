@@ -11,6 +11,7 @@ pipeline {
             }
         }
     stages {
+
 //         stage('Build') {
 //             steps {
 //                 sh 'mvn -B -DskipTests clean package'
@@ -23,11 +24,12 @@ pipeline {
 //                 }
 //             }
 //         }
+
         stage('Push Docker Image') {
             steps {
                 script {
-                    sh 'docker ps'  // 推送镜像到仓库
-                   // sh 'docker push $DOCKER_IMAGE:$DOCKER_TAG'  // 推送镜像到仓库
+                   // sh 'docker ps'  // 推送镜像到仓库
+                    sh 'docker push $DOCKER_IMAGE:$DOCKER_TAG'  // 推送镜像到仓库
 
                 }
             }
