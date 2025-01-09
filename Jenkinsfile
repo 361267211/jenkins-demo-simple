@@ -1,7 +1,7 @@
 pipeline {
     environment {
-        DOCKER_IMAGE = 'myrepo/myjen'        // Docker 镜像的名称
-        DOCKER_TAG = 'v1.0.0'                // Docker 镜像的标签
+        DOCKER_IMAGE = 'your-docker-repository/demo'        // Docker 镜像的名称
+        DOCKER_TAG = '0.0.1-SNAPSHOT'                        // Docker 镜像的标签
     }
     agent {
             docker {
@@ -12,18 +12,18 @@ pipeline {
         }
     stages {
 
-//         stage('Build') {
-//             steps {
-//                 sh 'mvn -B -DskipTests clean package'
-//             }
-//         }
-//         stage('Package Docker Image') {
-//             steps {
-//                 script {
-//                     sh 'mvn clean package dockerfile:build -DskipTests'
-//                 }
-//             }
-//         }
+        stage('Build') {
+            steps {
+                sh 'mvn -B -DskipTests clean package'
+            }
+        }
+        stage('Package Docker Image') {
+            steps {
+                script {
+                    sh 'mvn clean package dockerfile:build -DskipTests'
+                }
+            }
+        }
 
         stage('Push Docker Image') {
             steps {
@@ -31,6 +31,15 @@ pipeline {
                    // sh 'docker ps'  // 推送镜像到仓库
                     sh 'docker push $DOCKER_IMAGE:$DOCKER_TAG'  // 推送镜像到仓库
 
+                }
+            }
+        }
+
+         stage('Run Docker Container') {
+            steps {
+                script {
+                    // 这里直接运行宿主机中的 Docker 镜像
+                    sh "docker run -d --name myjen-container -p 8080:8080 $DOCKER_IMAGE:$DOCKER_TAG"
                 }
             }
         }
