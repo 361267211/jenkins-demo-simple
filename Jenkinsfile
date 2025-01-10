@@ -20,11 +20,15 @@ pipeline {
         stage('Package Docker Image') {
             steps {
                 script {
+                    //先删除容器，再删镜像(不删会一直增加新镜像，占用大量存储)
+                    sh "docker stop myjen-container && docker rm myjen-container"
+                    sh "docker rmi $DOCKER_IMAGE:$DOCKER_TAG"
+
                     sh 'mvn clean package dockerfile:build -DskipTests'
                 }
             }
         }
-
+//有本地的hub 库时才使用这一步
 //         stage('Push Docker Image') {
 //             steps {
 //                 script {
@@ -38,7 +42,6 @@ pipeline {
             steps {
                 script {
                     // 这里直接运行宿主机中的 Docker 镜像
-                    sh "docker stop myjen-container && docker rm myjen-container"
                     sh "docker run -d --name myjen-container -p 8090:8080 $DOCKER_IMAGE:$DOCKER_TAG"
 
                 }
