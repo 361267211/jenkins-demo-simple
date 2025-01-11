@@ -13,6 +13,17 @@ pipeline {
         }
     stages {
 
+        stages {
+                stage('Remote SSH') {
+                    steps {
+                        script {
+                            // 执行远程命令
+                            sh 'ssh -o StrictHostKeyChecking=no $REMOTE_SERVER "echo hello"'
+                        }
+                    }
+                }
+            }
+
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
@@ -40,16 +51,7 @@ pipeline {
 //             }
 //         }
 
-        stages {
-                stage('Remote SSH') {
-                    steps {
-                        script {
-                            // 执行远程命令
-                            sh 'ssh -o StrictHostKeyChecking=no $REMOTE_SERVER "echo hello"'
-                        }
-                    }
-                }
-            }
+
          stage('Run Docker Container') {
             steps {
                 script {
