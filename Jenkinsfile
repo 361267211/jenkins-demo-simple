@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     // 执行远程命令
-                    sh 'ssh -o StrictHostKeyChecking=no $REMOTE_SERVER "echo hello"'
+                    sh 'ssh -o StrictHostKeyChecking=no root@$REMOTE_SERVER "echo hello"'
                 }
             }
         }
