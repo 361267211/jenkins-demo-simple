@@ -12,17 +12,14 @@ pipeline {
             }
         }
     stages {
-
-        stages {
-                stage('Remote SSH') {
-                    steps {
-                        script {
-                            // 执行远程命令
-                            sh 'ssh -o StrictHostKeyChecking=no $REMOTE_SERVER "echo hello"'
-                        }
-                    }
+        stage('Remote SSH') {
+            steps {
+                script {
+                    // 执行远程命令
+                    sh 'ssh -o StrictHostKeyChecking=no $REMOTE_SERVER "echo hello"'
                 }
             }
+        }
 
         stage('Build') {
             steps {
