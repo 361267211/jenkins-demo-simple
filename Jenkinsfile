@@ -2,6 +2,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'your-docker-repository/demo'        // Docker 镜像的名称
         DOCKER_TAG = '0.0.1-SNAPSHOT'                        // Docker 镜像的标签
+        REMOTE_SERVER = '192.168.31.82'
     }
     agent {
             docker {
@@ -38,6 +39,17 @@ pipeline {
 //                 }
 //             }
 //         }
+
+        stages {
+                stage('Remote SSH') {
+                    steps {
+                        script {
+                            // 执行远程命令
+                            sh 'ssh -o StrictHostKeyChecking=no $REMOTE_SERVER "echo hello"'
+                        }
+                    }
+                }
+            }
          stage('Run Docker Container') {
             steps {
                 script {
