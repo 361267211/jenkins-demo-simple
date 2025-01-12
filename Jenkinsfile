@@ -22,14 +22,11 @@ pipeline {
             }
         }
 
-        stage('Remove Old') {
+        stage('Remove Container') {
                     steps {
                         script {
                             //先删除容器，再删镜像(不删会一直增加新镜像，占用大量存储)
                             sh 'docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME || true'
-                            //sh "docker rmi $DOCKER_IMAGE:$DOCKER_TAG"
-                            sh 'docker images | grep "<none>" | awk "{print $3}" | xargs docker rmi || true'
-                            sh 'docker images | grep $DOCKER_IMAGE | awk "{print $3}" | xargs docker rmi || true'
                         }
                     }
                 }
@@ -64,6 +61,15 @@ pipeline {
                     // 这里直接运行宿主机中的 Docker 镜像
                     sh 'docker run -d --name $CONTAINER_NAME -p 8090:8080 $DOCKER_IMAGE:$DOCKER_TAG'
 
+                }
+            }
+        }
+
+         stage('Remos None Image') {
+            steps {
+                script {
+                    // 这里直接运行宿主机中的 Docker 镜像
+                    sh 'docker images | grep "<none>" | awk "{print $3}" | xargs docker rmi || true'
                 }
             }
         }
