@@ -39,7 +39,7 @@ pipeline {
         stage('Package Docker Image') {
             steps {
                 script {
-                    sh 'mvn clean package dockerfile:build -DskipTests'
+                    sh 'mvn dockerfile:build -DskipTests'
                 }
             }
         }
