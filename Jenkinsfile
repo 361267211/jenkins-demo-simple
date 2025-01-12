@@ -2,7 +2,8 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'your-docker-repository/demo'        // Docker 镜像的名称
         DOCKER_TAG = '0.0.1-SNAPSHOT'                        // Docker 镜像的标签
-        REMOTE_SERVER = 'root@192.168.31.82'
+        REMOTE_SERVER = 'root@192.168.31.82'                // 远程服务器地址
+        CONTAINER_NAME = 'my-jen-demo'                      // 运行容器的名称
     }
     agent {
             docker {
@@ -25,10 +26,10 @@ pipeline {
                     steps {
                         script {
                             //先删除容器，再删镜像(不删会一直增加新镜像，占用大量存储)
-                            sh 'docker stop myjen-container && docker rm myjen-container || true'
+                            sh 'docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME || true'
                             //sh "docker rmi $DOCKER_IMAGE:$DOCKER_TAG"
                             sh 'docker images | grep "<none>" | awk "{print $3}" | xargs docker rmi || true'
-                            sh 'docker images | grep "your-docker-repository/demo" | awk "{print $3}" | xargs docker rmi || true'
+                            sh 'docker images | grep $DOCKER_IMAGE | awk "{print $3}" | xargs docker rmi || true'
                         }
                     }
                 }
@@ -41,11 +42,6 @@ pipeline {
         stage('Package Docker Image') {
             steps {
                 script {
-                    //先删除容器，再删镜像(不删会一直增加新镜像，占用大量存储)
-                    sh 'docker stop myjen-container && docker rm myjen-container || true'
-                    //sh "docker rmi $DOCKER_IMAGE:$DOCKER_TAG"
-                    sh 'docker images | grep "<none>" | awk "{print $3}" | xargs docker rmi'
-                    sh 'docker images | grep "your-docker-repository/demo" | awk "{print $3}" | xargs docker rmi'
                     sh 'mvn clean package dockerfile:build -DskipTests'
                 }
             }
@@ -66,7 +62,7 @@ pipeline {
             steps {
                 script {
                     // 这里直接运行宿主机中的 Docker 镜像
-                    sh 'docker run -d --name myjen-container -p 8090:8080 $DOCKER_IMAGE:$DOCKER_TAG'
+                    sh 'docker run -d --name $CONTAINER_NAME -p 8090:8080 $DOCKER_IMAGE:$DOCKER_TAG'
 
                 }
             }
