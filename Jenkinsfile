@@ -21,6 +21,18 @@ pipeline {
             }
         }
 
+        stage('Remove Old') {
+                    steps {
+                        script {
+                            //先删除容器，再删镜像(不删会一直增加新镜像，占用大量存储)
+                            sh 'docker stop myjen-container && docker rm myjen-container || true'
+                            //sh "docker rmi $DOCKER_IMAGE:$DOCKER_TAG"
+                            sh 'docker images | grep "<none>" | awk "{print $3}" | xargs docker rmi || true'
+                            sh 'docker images | grep "your-docker-repository/demo" | awk "{print $3}" | xargs docker rmi || true'
+                        }
+                    }
+                }
+
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
