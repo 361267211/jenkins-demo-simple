@@ -33,7 +33,7 @@ pipeline {
                     sh "docker stop myjen-container && docker rm myjen-container"
                     //sh "docker rmi $DOCKER_IMAGE:$DOCKER_TAG"
                     sh "docker images | grep '<none>' | awk '{print \$3}' | xargs docker rmi"
-                    sh "docker images | grep 'your-docker-repository/demo' | awk '{print $3}' | xargs docker rmi"
+                    sh 'docker images | grep "your-docker-repository/demo" | awk "{print $3}" | xargs docker rmi'
                     sh 'mvn clean package dockerfile:build -DskipTests'
                 }
             }
